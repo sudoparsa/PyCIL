@@ -1,6 +1,7 @@
 import numpy as np
 from torchvision import datasets, transforms
 from utils.toolkit import split_images_labels
+import os
 
 
 class iData(object):
@@ -8,6 +9,33 @@ class iData(object):
     test_trsf = []
     common_trsf = []
     class_order = None
+
+
+class ipCIFAR10(iData):
+    use_path = False
+    train_trsf = [
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.ColorJitter(brightness=63 / 255),
+        transforms.ToTensor(),
+    ]
+    test_trsf = [transforms.ToTensor()]
+    common_trsf = [
+        transforms.Normalize(
+            mean=(0.4914, 0.4822, 0.4465), std=(0.2023, 0.1994, 0.2010)
+        ),
+    ]
+
+    class_order = np.arange(10).tolist()
+
+    def download_data(self,
+    path='/content/drive/MyDrive/OIST/datasets/pcifar10_ps4_4'):
+        self.train_data = np.load(os.path.join(path, 'X_train.npy'))
+        self.train_targets = np.load(os.path.join(path, 'y_train.npy'))
+        self.test_data = np.load(os.path.join(path, 'X_test.npy'))
+        self.test_targets = np.load(os.path.join(path, 'y_test.npy'))
+        self.train_targets_gt = np.load(os.path.join(path, 'actual_y_train.npy'))
+        self.test_targets_gt = np.load(os.path.join(path, 'actual_y_test.npy'))
 
 
 class iCIFAR10(iData):
