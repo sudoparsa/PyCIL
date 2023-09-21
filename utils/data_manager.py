@@ -188,6 +188,9 @@ class DataManager(object):
         idata.download_data()
 
         # Data
+        dataset_names = ['pcifar10']
+        if dataset_name in dataset_names:
+            self._train_target_gt, self._test_target_gt = idata.train_targets_gt, idata.test_targets_gt
         self._train_data, self._train_targets = idata.train_data, idata.train_targets
         self._test_data, self._test_targets = idata.test_data, idata.test_targets
         self.use_path = idata.use_path
